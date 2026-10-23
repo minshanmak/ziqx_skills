@@ -1,0 +1,51 @@
+@import '@fontsource-variable/manrope';
+@import 'tailwindcss';
+
+/* Design tokens sampled from the "Trainly LMS – Design System" Figma file */
+@theme {
+  --font-sans: 'Manrope Variable', ui-sans-serif, system-ui, sans-serif;
+
+  --color-ink: #14151a;
+  --color-muted: #5b5e69;
+  --color-line: #e4e4ea;
+  --color-line-strong: #d6d6de;
+  --color-surface: #f6f6f8;
+  --color-wash: #f4f4f7;
+  --color-chip: #ededf0;
+
+  --color-lavender: #e8e8fa;
+  --color-sky: #dce7f9;
+  --color-lime: #eef3d8;
+  --color-mint: #e1f3e3;
+  --color-sand: #fcefd2;
+  --color-peach: #f4c7a8;
+
+  --color-link: #3b40b8;
+  --color-success: #25703a;
+  --color-danger: #b42e2e;
+  --color-warning: #8a5a0b;
+}
+
+@layer base {
+  html,
+  body,
+  #root {
+    min-height: 100%;
+  }
+  body {
+    background: #fff;
+    color: var(--color-ink);
+    font-family: var(--font-sans);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+  button {
+    cursor: pointer;
+  }
+}
+
+@media print {
+  .no-print {
+    display: none !important;
+  }
+}
