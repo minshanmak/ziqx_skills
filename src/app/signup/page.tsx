@@ -1,14 +1,17 @@
-import { useState, type FormEvent } from 'react'
-import { Link, Navigate, useNavigate } from 'react-router-dom'
-import { AuthLayout } from '../../components/layout/AuthLayout'
-import { Button } from '../../components/ui/Button'
-import { Field } from '../../components/ui/Field'
-import { testimonial } from '../../data/certificates'
-import { useAuth } from '../../context/AuthContext'
+'use client'
+
+import { useEffect, useState, type FormEvent } from 'react'
+import Link from 'next/link'
+import { useRouter } from 'next/navigation'
+import { AuthLayout } from '@/components/layout/AuthLayout'
+import { Button } from '@/components/ui/Button'
+import { Field } from '@/components/ui/Field'
+import { testimonial } from '@/data/certificates'
+import { useAuth } from '@/context/AuthContext'
 
 export default function SignupPage() {
   const { user, signup } = useAuth()
-  const navigate = useNavigate()
+  const router = useRouter()
 
   const [name, setName] = useState('')
   const [email, setEmail] = useState('')
@@ -16,7 +19,11 @@ export default function SignupPage() {
   const [error, setError] = useState('')
   const [busy, setBusy] = useState(false)
 
-  if (user) return <Navigate to="/courses" replace />
+  useEffect(() => {
+    if (user) {
+      router.replace('/courses')
+    }
+  }, [user, router])
 
   async function onSubmit(e: FormEvent) {
     e.preventDefault()
@@ -24,13 +31,15 @@ export default function SignupPage() {
     setBusy(true)
     try {
       await signup(name, email.trim(), password)
-      navigate('/courses', { replace: true })
+      router.replace('/courses')
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Something went wrong.')
     } finally {
       setBusy(false)
     }
   }
+
+  if (user) return null
 
   return (
     <AuthLayout
@@ -39,7 +48,7 @@ export default function SignupPage() {
       footer={
         <>
           Already have an account?{' '}
-          <Link to="/login" className="font-semibold text-link hover:underline">
+          <Link href="/login" className="font-semibold text-link hover:underline">
             Log in
           </Link>
         </>

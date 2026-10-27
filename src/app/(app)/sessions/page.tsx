@@ -1,7 +1,9 @@
-import { SessionRow } from '../../components/sessions/SessionRow'
-import { PageHeader } from '../../components/ui/PageHeader'
-import { SectionHeading } from '../../components/ui/SectionHeading'
-import { sessions } from '../../data/sessions'
+'use client'
+
+import { SessionRow } from '@/components/sessions/SessionRow'
+import { PageHeader } from '@/components/ui/PageHeader'
+import { SectionHeading } from '@/components/ui/SectionHeading'
+import { sessions } from '@/data/sessions'
 
 export default function LiveSessionsPage() {
   const upcoming = sessions.filter((s) => s.kind === 'upcoming')

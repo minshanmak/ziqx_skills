@@ -1,8 +1,11 @@
-import { createContext, useCallback, useContext, useMemo, useState, type ReactNode } from 'react'
+'use client'
+
+import { createContext, useCallback, useContext, useEffect, useMemo, useState, type ReactNode } from 'react'
 import type { User } from '../types'
 
 interface AuthValue {
   user: User | null
+  isLoading: boolean
   login: (email: string, password: string) => Promise<void>
   signup: (name: string, email: string, password: string) => Promise<void>
   updateProfile: (patch: Pick<User, 'name' | 'email'>) => void
@@ -13,6 +16,7 @@ const STORAGE_KEY = 'ziqx.user'
 const AuthContext = createContext<AuthValue | null>(null)
 
 function readStoredUser(): User | null {
+  if (typeof window === 'undefined') return null
   try {
     const raw = localStorage.getItem(STORAGE_KEY)
     return raw ? (JSON.parse(raw) as User) : null
@@ -34,13 +38,21 @@ function titleCase(text: string) {
  * The user is kept in localStorage so a refresh keeps you signed in.
  */
 export function AuthProvider({ children }: { children: ReactNode }) {
-  const [user, setUser] = useState<User | null>(readStoredUser)
+  const [user, setUser] = useState<User | null>(null)
+  const [isLoading, setIsLoading] = useState(true)
+
+  useEffect(() => {
+    setUser(readStoredUser())
+    setIsLoading(false)
+  }, [])
 
   const persist = useCallback((next: User | null) => {
     setUser(next)
     try {
-      if (next) localStorage.setItem(STORAGE_KEY, JSON.stringify(next))
-      else localStorage.removeItem(STORAGE_KEY)
+      if (typeof window !== 'undefined') {
+        if (next) localStorage.setItem(STORAGE_KEY, JSON.stringify(next))
+        else localStorage.removeItem(STORAGE_KEY)
+      }
     } catch {
       /* storage unavailable – keep in memory only */
     }
@@ -81,8 +93,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const logout = useCallback(() => persist(null), [persist])
 
   const value = useMemo(
-    () => ({ user, login, signup, updateProfile, logout }),
-    [user, login, signup, updateProfile, logout],
+    () => ({ user, isLoading, login, signup, updateProfile, logout }),
+    [user, isLoading, login, signup, updateProfile, logout],
   )
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>
 }

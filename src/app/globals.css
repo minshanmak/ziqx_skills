@@ -28,8 +28,7 @@
 
 @layer base {
   html,
-  body,
-  #root {
+  body {
     min-height: 100%;
   }
   body {

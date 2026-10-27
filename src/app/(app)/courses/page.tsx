@@ -1,11 +1,13 @@
-import { ContinueBanner } from '../../components/course/ContinueBanner'
-import { CourseTabs } from '../../components/course/CourseTabs'
-import { EnrolledCourseCard } from '../../components/course/EnrolledCourseCard'
-import { PageHeader } from '../../components/ui/PageHeader'
-import { SectionHeading } from '../../components/ui/SectionHeading'
-import { useAuth } from '../../context/AuthContext'
-import { enrolledCourses } from '../../data/courses'
-import { firstName } from '../../lib/format'
+'use client'
+
+import { ContinueBanner } from '@/components/course/ContinueBanner'
+import { CourseTabs } from '@/components/course/CourseTabs'
+import { EnrolledCourseCard } from '@/components/course/EnrolledCourseCard'
+import { PageHeader } from '@/components/ui/PageHeader'
+import { SectionHeading } from '@/components/ui/SectionHeading'
+import { useAuth } from '@/context/AuthContext'
+import { enrolledCourses } from '@/data/courses'
+import { firstName } from '@/lib/format'
 
 export default function MyCoursesPage() {
   const { user } = useAuth()

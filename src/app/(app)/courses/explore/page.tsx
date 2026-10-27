@@ -1,8 +1,10 @@
-import { CatalogCourseCard } from '../../components/course/CatalogCourseCard'
-import { CourseTabs } from '../../components/course/CourseTabs'
-import { PageHeader } from '../../components/ui/PageHeader'
-import { SectionHeading } from '../../components/ui/SectionHeading'
-import { catalogCourses } from '../../data/courses'
+'use client'
+
+import { CatalogCourseCard } from '@/components/course/CatalogCourseCard'
+import { CourseTabs } from '@/components/course/CourseTabs'
+import { PageHeader } from '@/components/ui/PageHeader'
+import { SectionHeading } from '@/components/ui/SectionHeading'
+import { catalogCourses } from '@/data/courses'
 
 export default function ExploreCoursesPage() {
   return (

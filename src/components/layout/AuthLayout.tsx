@@ -1,6 +1,6 @@
 import { ChevronLeft, Quote } from 'lucide-react'
 import type { ReactNode } from 'react'
-import { Link } from 'react-router-dom'
+import Link from 'next/link'
 import { testimonial } from '../../data/certificates'
 import { Logo } from '../ui/Logo'
 
@@ -26,7 +26,7 @@ export function AuthLayout({ title, subtitle, children, footer }: AuthLayoutProp
 
           <p className="mt-5 text-center text-[14px] text-muted">{footer}</p>
           <Link
-            to="/courses"
+            href="/courses"
             className="mt-5 flex items-center justify-center gap-1.5 text-[13px] font-semibold text-muted hover:text-ink"
           >
             <ChevronLeft size={14} strokeWidth={2.2} />

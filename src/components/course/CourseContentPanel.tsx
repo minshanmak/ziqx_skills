@@ -1,3 +1,5 @@
+'use client'
+
 import {
   CircleCheck,
   CircleHelp,
@@ -7,7 +9,7 @@ import {
   Layers,
 } from 'lucide-react'
 import { useState } from 'react'
-import { Link } from 'react-router-dom'
+import Link from 'next/link'
 import { cn } from '../../lib/cn'
 import type { CourseModule, LessonItem } from '../../types'
 import { ProgressBar } from '../ui/ProgressBar'
@@ -113,7 +115,7 @@ export function CourseContentPanel({
                     return (
                       <li key={item.id}>
                         <Link
-                          to={href}
+                          href={href}
                           aria-current={isCurrent ? 'true' : undefined}
                           className={cn(
                             'flex h-[37px] items-center gap-3 rounded-[10px] px-3 text-[14px] hover:bg-surface',

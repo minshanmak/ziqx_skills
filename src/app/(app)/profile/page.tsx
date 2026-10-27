@@ -1,15 +1,17 @@
+'use client'
+
 import { LogOut } from 'lucide-react'
 import { useState, type FormEvent } from 'react'
-import { useNavigate } from 'react-router-dom'
-import { Avatar } from '../../components/ui/Avatar'
-import { Button } from '../../components/ui/Button'
-import { Field } from '../../components/ui/Field'
-import { PageHeader } from '../../components/ui/PageHeader'
-import { useAuth } from '../../context/AuthContext'
+import { useRouter } from 'next/navigation'
+import { Avatar } from '@/components/ui/Avatar'
+import { Button } from '@/components/ui/Button'
+import { Field } from '@/components/ui/Field'
+import { PageHeader } from '@/components/ui/PageHeader'
+import { useAuth } from '@/context/AuthContext'
 
 export default function ProfilePage() {
   const { user, updateProfile, logout } = useAuth()
-  const navigate = useNavigate()
+  const router = useRouter()
   const [name, setName] = useState(user?.name ?? '')
   const [email, setEmail] = useState(user?.email ?? '')
   const [saved, setSaved] = useState(false)
@@ -75,7 +77,7 @@ export default function ProfilePage() {
               icon={<LogOut size={16} strokeWidth={2} />}
               onClick={() => {
                 logout()
-                navigate('/login', { replace: true })
+                router.replace('/login')
               }}
             >
               Sign out

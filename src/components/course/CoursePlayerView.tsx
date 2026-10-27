@@ -1,20 +1,27 @@
+'use client'
+
 import { ArrowRight, Check, Play } from 'lucide-react'
 import { useMemo, useState } from 'react'
-import { Navigate, useNavigate, useParams } from 'react-router-dom'
-import { CourseContentPanel } from '../../components/course/CourseContentPanel'
-import { Breadcrumbs } from '../../components/layout/Breadcrumbs'
-import { Button } from '../../components/ui/Button'
+import { useRouter } from 'next/navigation'
+import { CourseContentPanel } from '@/components/course/CourseContentPanel'
+import { Breadcrumbs } from '@/components/layout/Breadcrumbs'
+import { Button } from '@/components/ui/Button'
 import {
   dataAnalysisModules,
   getCourse,
   initiallyCompleted,
   lessonDetails,
   resumeTarget,
-} from '../../data/courses'
+} from '@/data/courses'
 
-export default function CoursePlayerPage() {
-  const { courseId, lessonId } = useParams()
-  const navigate = useNavigate()
+export function CoursePlayerView({
+  courseId,
+  lessonId,
+}: {
+  courseId: string
+  lessonId?: string
+}) {
+  const router = useRouter()
   const course = getCourse(courseId)
 
   const [completed, setCompleted] = useState<Set<string>>(() => new Set(initiallyCompleted))
@@ -25,9 +32,15 @@ export default function CoursePlayerPage() {
   const flat = useMemo(() => dataAnalysisModules.flatMap((m) => m.items), [])
   const nextItem = flat[flat.findIndex((i) => i.id === currentId) + 1]
 
-  if (!course) return <Navigate to="/courses" replace />
+  if (!course) {
+    router.replace('/courses')
+    return null
+  }
   // Only the Data analysis outline is mocked – other courses fall back to it too.
-  if (!lesson) return <Navigate to={`/courses/${course.id}`} replace />
+  if (!lesson) {
+    router.replace(`/courses/${course.id}`)
+    return null
+  }
 
   const isDone = completed.has(currentId)
   const toggleComplete = () =>
@@ -39,9 +52,9 @@ export default function CoursePlayerPage() {
     })
 
   const goNext = () => {
-    if (!nextItem) return navigate('/courses')
+    if (!nextItem) return router.push('/courses')
     setCompleted((prev) => new Set(prev).add(currentId))
-    navigate(
+    router.push(
       nextItem.type === 'quiz'
         ? `/courses/${course.id}/quiz/${nextItem.id}`
         : `/courses/${course.id}/lessons/${nextItem.id}`,

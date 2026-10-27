@@ -1,22 +1,29 @@
-import { useState, type FormEvent } from 'react'
-import { Link, Navigate, useLocation, useNavigate } from 'react-router-dom'
-import { AuthLayout } from '../../components/layout/AuthLayout'
-import { Button } from '../../components/ui/Button'
-import { Field } from '../../components/ui/Field'
-import { useAuth } from '../../context/AuthContext'
+'use client'
 
-export default function LoginPage() {
+import { Suspense, useEffect, useState, type FormEvent } from 'react'
+import Link from 'next/link'
+import { useRouter, useSearchParams } from 'next/navigation'
+import { AuthLayout } from '@/components/layout/AuthLayout'
+import { Button } from '@/components/ui/Button'
+import { Field } from '@/components/ui/Field'
+import { useAuth } from '@/context/AuthContext'
+
+function LoginForm() {
   const { user, login } = useAuth()
-  const navigate = useNavigate()
-  const location = useLocation()
-  const from = (location.state as { from?: string } | null)?.from ?? '/courses'
+  const router = useRouter()
+  const searchParams = useSearchParams()
+  const from = searchParams.get('from') || '/courses'
 
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [error, setError] = useState('')
   const [busy, setBusy] = useState(false)
 
-  if (user) return <Navigate to={from} replace />
+  useEffect(() => {
+    if (user) {
+      router.replace(from)
+    }
+  }, [user, router, from])
 
   async function onSubmit(e: FormEvent) {
     e.preventDefault()
@@ -24,12 +31,16 @@ export default function LoginPage() {
     setBusy(true)
     try {
       await login(email.trim(), password)
-      navigate(from, { replace: true })
+      router.replace(from)
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Something went wrong.')
     } finally {
       setBusy(false)
     }
+  }
+
+  if (user) {
+    return null
   }
 
   return (
@@ -39,7 +50,7 @@ export default function LoginPage() {
       footer={
         <>
           New here?{' '}
-          <Link to="/signup" className="font-semibold text-link hover:underline">
+          <Link href="/signup" className="font-semibold text-link hover:underline">
             Create an account
           </Link>
         </>
@@ -81,5 +92,19 @@ export default function LoginPage() {
         </Button>
       </form>
     </AuthLayout>
+  )
+}
+
+export default function LoginPage() {
+  return (
+    <Suspense
+      fallback={
+        <div className="flex h-screen w-full items-center justify-center">
+          <div className="size-8 animate-spin rounded-full border-2 border-line-strong border-t-ink" />
+        </div>
+      }
+    >
+      <LoginForm />
+    </Suspense>
   )
 }

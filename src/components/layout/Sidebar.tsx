@@ -1,5 +1,8 @@
+'use client'
+
 import { BookOpen, ChevronLeft, User as UserIcon, Video } from 'lucide-react'
-import { NavLink } from 'react-router-dom'
+import Link from 'next/link'
+import { usePathname } from 'next/navigation'
 import { cn } from '../../lib/cn'
 import { useAuth } from '../../context/AuthContext'
 import { Avatar } from '../ui/Avatar'
@@ -18,6 +21,7 @@ interface SidebarProps {
 
 export function Sidebar({ collapsed, onToggle }: SidebarProps) {
   const { user } = useAuth()
+  const pathname = usePathname()
 
   return (
     <aside
@@ -50,30 +54,27 @@ export function Sidebar({ collapsed, onToggle }: SidebarProps) {
       </div>
 
       <nav className="mt-[38px] flex flex-col gap-1 px-[18px]" aria-label="Main">
-        {nav.map(({ to, label, icon: Icon }) => (
-          <NavLink
-            key={to}
-            to={to}
-            title={collapsed ? label : undefined}
-            className={({ isActive }) =>
-              cn(
+        {nav.map(({ to, label, icon: Icon }) => {
+          const isActive = pathname === to || pathname.startsWith(to + '/')
+          return (
+            <Link
+              key={to}
+              href={to}
+              title={collapsed ? label : undefined}
+              className={cn(
                 'relative flex h-[42px] items-center gap-3 rounded-[10px] text-[14px] font-semibold transition-colors',
                 collapsed ? 'justify-center px-0' : 'px-3.5',
                 isActive ? 'bg-wash text-ink' : 'text-muted hover:bg-surface hover:text-ink',
-              )
-            }
-          >
-            {({ isActive }) => (
-              <>
-                {isActive && (
-                  <span className="absolute top-1/2 -left-[18px] h-[22px] w-1 -translate-y-1/2 rounded-r-full bg-ink" />
-                )}
-                <Icon size={20} strokeWidth={1.75} className="shrink-0" />
-                {!collapsed && <span>{label}</span>}
-              </>
-            )}
-          </NavLink>
-        ))}
+              )}
+            >
+              {isActive && (
+                <span className="absolute top-1/2 -left-[18px] h-[22px] w-1 -translate-y-1/2 rounded-r-full bg-ink" />
+              )}
+              <Icon size={20} strokeWidth={1.75} className="shrink-0" />
+              {!collapsed && <span>{label}</span>}
+            </Link>
+          )
+        })}
       </nav>
 
       <div className="mt-auto border-t border-line">

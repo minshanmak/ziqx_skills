@@ -1,3 +1,5 @@
+'use client'
+
 import { BookOpen, CalendarPlus, CirclePlay, Video } from 'lucide-react'
 import { toneBg } from '../course/tones'
 import { Button } from '../ui/Button'

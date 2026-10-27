@@ -1,20 +1,34 @@
-import { Award } from 'lucide-react'
-import { useState } from 'react'
-import { Navigate, useParams } from 'react-router-dom'
-import { Breadcrumbs } from '../../components/layout/Breadcrumbs'
-import { Button } from '../../components/ui/Button'
-import { useAuth } from '../../context/AuthContext'
-import { certificates } from '../../data/certificates'
-import { getCourse } from '../../data/courses'
+'use client'
 
-export default function CertificatePage() {
-  const { courseId } = useParams()
+import { Award } from 'lucide-react'
+import { use, useEffect, useState } from 'react'
+import { useRouter } from 'next/navigation'
+import { Breadcrumbs } from '@/components/layout/Breadcrumbs'
+import { Button } from '@/components/ui/Button'
+import { useAuth } from '@/context/AuthContext'
+import { certificates } from '@/data/certificates'
+import { getCourse } from '@/data/courses'
+
+export default function CertificatePage({
+  params,
+}: {
+  params: Promise<{ courseId: string }>
+}) {
+  const { courseId } = use(params)
+  const router = useRouter()
   const { user } = useAuth()
   const [copied, setCopied] = useState(false)
 
   const course = getCourse(courseId)
   const certificate = courseId ? certificates[courseId] : undefined
-  if (!course || !certificate) return <Navigate to="/courses" replace />
+
+  useEffect(() => {
+    if (!course || !certificate) {
+      router.replace('/courses')
+    }
+  }, [course, certificate, router])
+
+  if (!course || !certificate) return null
 
   async function copyLink() {
     try {

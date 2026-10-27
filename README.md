@@ -1,12 +1,13 @@
 # Ziqx Skills – Learner app
 
-React 19 + TypeScript + Vite + Tailwind CSS v4 + React Router. Built from the "Trainly LMS – Design System" Figma file.
+React 19 + TypeScript + Next.js (App Router) + Tailwind CSS v4. Built from the "Trainly LMS – Design System" Figma file.
 
 ## Run it
 ```bash
 npm install
-npm run dev       # http://localhost:5173
-npm run build     # type-check + production build
+npm run dev     
+npm run build     # production build
+npm run start     # production server
 ```
 Log in with any valid email and any password (auth is mocked in `src/context/AuthContext.tsx`).
 
@@ -23,6 +24,6 @@ Log in with any valid email and any password (auth is mocked in `src/context/Aut
 | `/profile` | Profile |
 
 ## Where to change things
-- Colours / font: `src/index.css` (`@theme` block)
+- Colours / font: `src/app/globals.css` (`@theme` block)
 - Mock data (replace with API calls): `src/data/*`
 - Places marked `TODO` need a real backend (join session, add to calendar, video player, enrol, change password).

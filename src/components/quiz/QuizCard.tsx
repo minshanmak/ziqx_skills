@@ -1,6 +1,8 @@
+'use client'
+
 import { ArrowRight, Clock } from 'lucide-react'
 import { useEffect, useState } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { useRouter } from 'next/navigation'
 import { cn } from '../../lib/cn'
 import { formatTimer } from '../../lib/format'
 import type { Quiz } from '../../types'
@@ -13,7 +15,7 @@ interface QuizCardProps {
 }
 
 export function QuizCard({ quiz, courseId }: QuizCardProps) {
-  const navigate = useNavigate()
+  const router = useRouter()
   const [index, setIndex] = useState(0)
   const [answers, setAnswers] = useState<(number | null)[]>(() => quiz.questions.map(() => null))
   const [seconds, setSeconds] = useState(0)
@@ -29,7 +31,7 @@ export function QuizCard({ quiz, courseId }: QuizCardProps) {
   const question = quiz.questions[index]!
   const selected = answers[index]
   const isLast = index === total - 1
-  const backToCourse = () => navigate(`/courses/${courseId}`)
+  const backToCourse = () => router.push(`/courses/${courseId}`)
 
   const score = answers.filter((a, i) => a === quiz.questions[i]!.correctIndex).length
   const percent = Math.round((score / total) * 100)

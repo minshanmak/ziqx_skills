@@ -1,3 +1,5 @@
+'use client'
+
 import type { Course } from '../../types'
 import { formatPrice } from '../../lib/format'
 import { Button } from '../ui/Button'

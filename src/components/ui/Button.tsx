@@ -1,5 +1,5 @@
-import type { ButtonHTMLAttributes, ReactNode } from 'react'
-import { Link } from 'react-router-dom'
+import type { ButtonHTMLAttributes, MouseEventHandler, ReactNode } from 'react'
+import Link from 'next/link'
 import { cn } from '../../lib/cn'
 
 type Variant = 'primary' | 'outline' | 'ghost'
@@ -15,8 +15,14 @@ interface BaseProps {
   children: ReactNode
 }
 
-type ButtonProps = BaseProps & ButtonHTMLAttributes<HTMLButtonElement> & { to?: undefined }
-type LinkButtonProps = BaseProps & { to: string; onClick?: () => void }
+type ButtonProps = BaseProps &
+  ButtonHTMLAttributes<HTMLButtonElement> & { to?: undefined; href?: undefined }
+
+type LinkButtonProps = BaseProps & {
+  to?: string
+  href?: string
+  onClick?: MouseEventHandler<HTMLAnchorElement>
+}
 
 const variants: Record<Variant, string> = {
   primary: 'bg-ink text-white hover:bg-black border border-ink',
@@ -41,9 +47,20 @@ export function Button(props: ButtonProps | LinkButtonProps) {
     className,
   )
 
-  if (props.to !== undefined) {
+  if ('href' in props && props.href) {
+    const { href, onClick } = props
     return (
-      <Link to={props.to} onClick={props.onClick} className={classes}>
+      <Link href={href} onClick={onClick} className={classes}>
+        {icon}
+        {children}
+      </Link>
+    )
+  }
+
+  if ('to' in props && props.to) {
+    const { to, onClick } = props
+    return (
+      <Link href={to} onClick={onClick} className={classes}>
         {icon}
         {children}
       </Link>
@@ -57,11 +74,10 @@ export function Button(props: ButtonProps | LinkButtonProps) {
     fullWidth: _f,
     className: _c,
     children: _ch,
-    to: _to,
     type = 'button',
     ...rest
-  } = props
-  void [_v, _s, _i, _f, _c, _ch, _to]
+  } = props as ButtonProps
+  void [_v, _s, _i, _f, _c, _ch]
   return (
     <button type={type} className={classes} {...rest}>
       {icon}

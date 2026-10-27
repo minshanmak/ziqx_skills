@@ -1,6 +1,6 @@
 import { ChevronRight } from 'lucide-react'
 import { Fragment } from 'react'
-import { Link } from 'react-router-dom'
+import Link from 'next/link'
 
 export interface Crumb {
   label: string
@@ -15,7 +15,7 @@ export function Breadcrumbs({ items }: { items: Crumb[] }) {
         return (
           <Fragment key={item.label}>
             {item.to && !last ? (
-              <Link to={item.to} className="font-medium text-muted hover:text-ink">
+              <Link href={item.to} className="font-medium text-muted hover:text-ink">
                 {item.label}
               </Link>
             ) : (
